@@ -176,8 +176,8 @@ public class DpllGui extends javax.swing.JFrame {
                         .addComponent(checkButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,6 +329,14 @@ public class DpllGui extends javax.swing.JFrame {
         }
         return true;
         
+    }
+    
+    public void setFormulaText(String text){
+        formulaTextArea.setText(text);
+    }
+    
+    public void setIntText(String text){
+        intTextArea.setText(text);
     }
     
         private HashMap<Integer, ArrayList<Integer>> test(){

@@ -13,6 +13,7 @@ public class PigeonFrame extends javax.swing.JFrame {
     
     private DpllGui gui;
     private PigeonProblem pp;
+    private Dpll dpllAlg;
 
     /**
      * Creates new form PigeonFrame
@@ -102,7 +103,23 @@ public class PigeonFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        noLabel.setText("");
         pp = new PigeonProblem((int)nSpinner.getValue());
+        Formula f = pp.generateFormula();
+        gui.setFormulaText(f.toString());
+        dpllAlg = new Dpll(f);
+        Pair rez = dpllAlg.start();
+        if(rez.getDecision()){
+            gui.setIntText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
+            noLabel.setText("Yes!");
+            //boolean checkResult = checkInterpretation(rez.getInterpretation(), formulaCopy);
+           // if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
+        }
+        else {
+            gui.setIntText("Formula is\nunsatisfiable!");
+            noLabel.setText("No!");
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
