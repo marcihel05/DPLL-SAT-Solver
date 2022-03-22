@@ -18,27 +18,24 @@ enum satPosibilities{
 }
 
 public class Formula {
-    //private ArrayList<ArrayList<Integer>> clauses;
-    private HashMap<Integer,ArrayList<Integer>> _clauses;
+    private HashMap<Integer,ArrayList<Integer>> clauses;
     private ArrayList<Integer> prop;
     private Interpretation interp;
     private Map<Integer,Integer> counter;
     private HashMap<Integer,Set<Integer>> literals;
 
     public Formula(){
-        //clauses = new ArrayList<>();
         prop = new ArrayList<>();
         counter = new HashMap<>();
         interp = new Interpretation();
         literals = new HashMap<>();
-        _clauses = new HashMap<>();
+        clauses = new HashMap<>();
     }
-    public Formula(ArrayList<Integer>p, HashMap<Integer,ArrayList<Integer>> _c, HashMap<Integer,Set<Integer>> l){
-        //clauses = c;
+    public Formula(ArrayList<Integer>p, HashMap<Integer,ArrayList<Integer>> _c, HashMap<Integer,Set<Integer>> l){;
         prop = p;
         interp = new Interpretation();
         counter = new HashMap<>();
-        _clauses = _c;
+        clauses = _c;
         literals = l;
         for(int p1 : prop){
             counter.put(p1,0);
@@ -48,16 +45,17 @@ public class Formula {
     
     private void count(){
         for(int p: prop){
-            for(ArrayList<Integer> c: _clauses.values()){
+            for(ArrayList<Integer> c: clauses.values()){
                 for(int l: c){
                     if(p == l || p == -l) counter.replace(p, counter.get(p) + 1);
+                    if(interp.doesPropExist(p)) counter.replace(p,-1);
                 }
             }
         }
     }
 
     public int doesUnitExist(){
-        for(ArrayList<Integer>c: _clauses.values()){
+        for(ArrayList<Integer>c: clauses.values()){
             if(c.size() == 1) return c.get(0);
         }
         return 0;
@@ -68,27 +66,26 @@ public class Formula {
         boolean stop = false;
         while(!stop){
             stop = true;
-            var keys = _clauses.keySet().toArray(new Integer[0]);
-            for(int i = 0; i < _clauses.keySet().size(); ++i){
-                if(_clauses.get(keys[i]).size() == 1){
+            var keys = clauses.keySet().toArray(new Integer[0]);
+            for(int i = 0; i < clauses.keySet().size(); ++i){
+                if(clauses.get(keys[i]).size() == 1){
                     stop = false;
-                    int l = _clauses.get(keys[i]).get(0);
+                    int l = clauses.get(keys[i]).get(0);
                     System.out.println("unit literal je " + l);
                     if(l > 0) interp.addProp(l, true);
                     else interp.addProp(-l, false);
-                    for(int j = 0; j < _clauses.keySet().size(); ++j){
-                        if(_clauses.containsKey(keys[j])){
-                            if(_clauses.get(keys[j]).contains(l)){
-                                _clauses.remove(keys[j]);
+                    counter.replace(abs(l),-1);
+                    for(int j = 0; j < clauses.keySet().size(); ++j){
+                        if(clauses.containsKey(keys[j])){
+                            if(clauses.get(keys[j]).contains(l)){
+                                clauses.remove(keys[j]);
                                 --j;
-                                keys = _clauses.keySet().toArray(new Integer[0]);
-                                if(l == 5) System.out.println(j);
-                                if(l == 5) System.out.println(_clauses.keySet().size());
+                                keys = clauses.keySet().toArray(new Integer[0]);
                             }
-                            else if(_clauses.get(keys[j]).contains(-l)){
+                            else if(clauses.get(keys[j]).contains(-l)){
                                 System.out.println("nasao suprotno od " + l);
-                                _clauses.get(keys[j]).remove((Integer)(-l));
-                                if(_clauses.get(keys[j]).isEmpty()) {
+                                clauses.get(keys[j]).remove((Integer)(-l));
+                                if(clauses.get(keys[j]).isEmpty()) {
                                     System.out.println("gotovo");
                                     return satPosibilities.unsat;
                                 }
@@ -99,25 +96,6 @@ public class Formula {
                     }
                 }
             }
-            /*for(int j = 0; j < clauses.size(); ++j){
-                if(clauses.get(j).size() == 1){
-                    stop = false;
-                    int l = clauses.get(j).get(0);
-                    System.out.println("unit literal je " + l);
-                    if(l > 0) interp.addProp(l, true);
-                    else interp.addProp(-l, false);
-                    for(int i = 0; i < clauses.size(); ++i){
-                        if(clauses.get(i).contains(l)){
-                            clauses.remove(i);
-                            --i;
-                        }
-                        else if(clauses.get(i).contains(-l)){
-                            clauses.get(i).remove(clauses.get(i).indexOf(-l));
-                            if(clauses.get(i).isEmpty()) return satPosibilities.unsat;
-                        }
-                    }
-                }
-            }*/
         }
         return satPosibilities.normal;
     }
@@ -127,7 +105,7 @@ public class Formula {
         for(int p: prop){
             boolean positive = false;
             boolean negative = false;
-            for(ArrayList<Integer> c : _clauses.values()){
+            for(ArrayList<Integer> c : clauses.values()){
                 for(int l: c){
                     if(l == p) positive = true;
                     if(l == -p) negative = true;
@@ -136,11 +114,13 @@ public class Formula {
             if(positive == true && negative == false){ // set I(p) = 1 and remove clauses containing p
                 System.out.println("pure literal founded " + p);
                 interp.addProp(p, true);
+                counter.replace(abs(p),-1);
                 removeClauses(p);
             }
             else if(positive == false && negative == true){ // set I(p) = 0 and remove clauses containing p
                 System.out.println("pure literal founded " + (-p));
                 interp.addProp(p, false);
+                counter.replace(abs(p),-1);
                 removeClauses(-p);
             }
         }
@@ -148,43 +128,20 @@ public class Formula {
     
     private void removeClauses(int p){
         var c = literals.get(p).toArray(new Integer[0]);
-        for(int i = 0; i < literals.get(p).size(); ++i) _clauses.remove(c[i]);
+        for(int i = 0; i < literals.get(p).size(); ++i) clauses.remove(c[i]);
         var negc = literals.get(-p).toArray(new Integer[0]);
         for(int i = 0; i < negc.length; ++i){
-            if(_clauses.containsKey(negc[i]))
-            _clauses.get(negc[i]).remove((Integer)(-p));
+            if(clauses.containsKey(negc[i]))
+            clauses.get(negc[i]).remove((Integer)(-p));
         }
-        //for(int i = 0; i < literals.get(-p).size(); ++i) _clauses.remove((Integer)(-p));
-        /*for(int i = 0; i < clauses.size(); ++i){
-            boolean remove = false;
-            for(int j = 0; j < clauses.get(i).size(); ++j){
-                boolean removeLit = false;
-                if(clauses.get(i).get(j) == p) {
-                    remove = true;
-                    //break;
-                }
-                if(clauses.get(i).get(j) == -p){
-                    removeLit = true;
-                    //break;
-                }
-                if(removeLit){
-                    clauses.get(i).remove(j);
-                    --j;
-                }
-            }
-            if(remove){
-                clauses.remove(i);
-                --i;
-            }
-        }*/
     }
 
     public boolean isEmpty(){ 
-        return _clauses.isEmpty();
+        return clauses.isEmpty();
     }
 
     public boolean doesEmptyClauseExists(){ // is there false disj
-        for(ArrayList<Integer> c : _clauses.values()){
+        for(ArrayList<Integer> c : clauses.values()){
             boolean disj = false;
             boolean notDef = false;
             for(int l : c){
@@ -202,6 +159,7 @@ public class Formula {
     }
 
     public int chooseLiteral(){
+        count();
         int maxValue = (Collections.max(counter.values()));
         for(int p : prop){
             if(maxValue == counter.get(p)) return p;
@@ -219,7 +177,7 @@ public class Formula {
     
     public boolean checkIfSat(){
         boolean sat = true;
-        for(ArrayList<Integer> c : _clauses.values()){
+        for(ArrayList<Integer> c : clauses.values()){
             boolean disj = false;
             for(int l : c){
                 if(interp.doesPropExist(abs(l))){
@@ -233,20 +191,14 @@ public class Formula {
     }
     
     public int size(){
-        return _clauses.size();
+        return clauses.size();
     }
 
     public Formula copy(){
         ArrayList<Integer> newProp = new ArrayList<Integer>();
         for(int p: prop) newProp.add(p);
-        /*ArrayList<ArrayList<Integer>> newClauses = new ArrayList<ArrayList<Integer>> ();
-        for(ArrayList<Integer> c:clauses){
-            ArrayList<Integer> newC = new ArrayList<>();
-            for(int p : c) newC.add(p);
-            newClauses.add(newC);
-        }*/
         HashMap<Integer,ArrayList<Integer>> new_clauses = new HashMap<>();
-        for(var p: _clauses.entrySet()){
+        for(var p: clauses.entrySet()){
             ArrayList<Integer> newSet = new ArrayList<>();
             newSet.addAll(p.getValue());
             new_clauses.put(p.getKey(), newSet);
@@ -275,7 +227,7 @@ public class Formula {
     }
     
     public HashMap<Integer,ArrayList<Integer>> getClauses(){
-        return _clauses;
+        return clauses;
     }
     
     public ArrayList<Integer> getProp(){
@@ -286,15 +238,15 @@ public class Formula {
     public String toString(){
         StringBuilder ret = new StringBuilder();
         ret.append("F={");
-        var keys = _clauses.keySet().toArray(new Integer[0]);
-        for(int i = 0; i < _clauses.size(); ++i){
+        var keys = clauses.keySet().toArray(new Integer[0]);
+        for(int i = 0; i < clauses.size(); ++i){
             if(i != 0) ret.append("     ");
-            for(int j = 0; j < _clauses.get(keys[i]).size(); ++j){
-                if(_clauses.get(keys[i]).get(j) < 0) ret.append("-");
-                ret.append("P" + abs(_clauses.get(keys[i]).get(j)));
-                if(j!= _clauses.get(keys[i]).size()-1) ret.append(" \\/ ");
+            for(int j = 0; j < clauses.get(keys[i]).size(); ++j){
+                if(clauses.get(keys[i]).get(j) < 0) ret.append("-");
+                ret.append("P" + abs(clauses.get(keys[i]).get(j)));
+                if(j!= clauses.get(keys[i]).size()-1) ret.append(" \\/ ");
             }
-            if(i!=_clauses.size()-1) ret.append(",\n");
+            if(i!=clauses.size()-1) ret.append(",\n");
         }
         ret.append("}");
         return ret.toString();

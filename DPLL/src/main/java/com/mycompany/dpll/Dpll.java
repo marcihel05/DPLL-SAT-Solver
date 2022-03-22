@@ -18,21 +18,30 @@ public class Dpll {
     public Dpll(Formula f){
         formula = f;
     }
+    
+    public Pair start(){
+        return dpllAlgorithm(formula);
+    }
 
-    public Pair dpllAlgorithm(Formula form){
+    private Pair dpllAlgorithm(Formula form){
+        System.out.println("pocetak");
+        System.out.println("broj disj na pocetku je " + form.size());
+        satPosibilities r = form.unitPropagate();
+        System.out.println("broj disj nakon unit je " + form.size());
+        if( r == satPosibilities.unsat) return new Pair(false, form.getInterpretation());
+        form.pureLiteral();
+        System.out.println("broj disj nakon pure je " + form.size());
         if(form.isEmpty()) return new Pair(true, form.getInterpretation());
         if(form.checkIfSat()) return new Pair(true, form.getInterpretation());
         if(form.doesEmptyClauseExists()) return new Pair(false, form.getInterpretation());
-        satPosibilities r = form.unitPropagate();
-        if( r == satPosibilities.unsat) return new Pair(false, form.getInterpretation());
-        form.pureLiteral();
         int l = form.chooseLiteral();
         Formula f1 = form.copy();
         Formula f2 = form.copy();
-        f1.assignLiteral(abs(l), true);
-        f2.assignLiteral(abs(l), false);
+        System.out.println("odabrani literal je " + l);
+        f1.assignLiteral(l, false);
+        f2.assignLiteral(l, true);
         Pair p1 = dpllAlgorithm(f1);
         if(p1.getDecision()) return p1;
-        else return dpllAlgorithm(f2);
+        else {System.out.println("probam s true za " + l); return dpllAlgorithm(f2);}
     }
 }

@@ -14,7 +14,12 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -23,8 +28,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DpllGui extends javax.swing.JFrame {
     
-    Formula formula;
-    String fileName ="";
+    private Formula formula;
+    private Formula formulaCopy;
+    private String fileName ="";
     private JFileChooser jChooser1 = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
 
@@ -77,6 +83,7 @@ public class DpllGui extends javax.swing.JFrame {
         formulaTextArea.setName("formulaTextArea"); // NOI18N
         jScrollPane1.setViewportView(formulaTextArea);
 
+        checkButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         checkButton.setText("Check SAT");
         checkButton.setEnabled(false);
         checkButton.setName("chackButton"); // NOI18N
@@ -86,6 +93,7 @@ public class DpllGui extends javax.swing.JFrame {
             }
         });
 
+        loadButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         loadButton.setText("Load from file");
         loadButton.setName("loadButton"); // NOI18N
         loadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -100,22 +108,36 @@ public class DpllGui extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel1.setText("Input formula in CNF");
 
+        jLabel2.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel2.setText("or");
 
+        pigeonButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         pigeonButton.setText("Pigeons");
+        pigeonButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pigeonButtonActionPerformed(evt);
+            }
+        });
 
-        triangleButton.setText("Triangle coloring");
+        triangleButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        triangleButton.setText("Graph coloring");
 
+        queensButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         queensButton.setText("4 queens");
 
+        jLabel3.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel3.setText("<html>Number of<br>propositional variables<html>");
 
+        jLabel4.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel4.setText("<html>Number of<br>clauses</html>");
 
+        propLabel.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         propLabel.setText("jLabel5");
 
+        clausesLabel.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         clausesLabel.setText("jLabel6");
 
         intTextArea.setEditable(false);
@@ -134,41 +156,35 @@ public class DpllGui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(propLabel)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(propLabel)
                                 .addGap(28, 28, 28)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(clausesLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pigeonButton)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(clausesLabel))
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel2)
-                                .addGap(34, 34, 34)
-                                .addComponent(loadButton))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(triangleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(checkButton))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(queensButton))))
+                                .addGap(28, 28, 28)
+                                .addComponent(loadButton)))
+                        .addGap(32, 32, 32)
+                        .addComponent(checkButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(queensButton)
+                            .addComponent(pigeonButton)
+                            .addComponent(triangleButton))))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,21 +197,22 @@ public class DpllGui extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(checkButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(pigeonButton)
-                        .addComponent(triangleButton)
-                        .addComponent(queensButton))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(propLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(clausesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(propLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clausesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pigeonButton)
+                        .addGap(38, 38, 38)
+                        .addComponent(queensButton)
+                        .addGap(46, 46, 46)
+                        .addComponent(triangleButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 27, Short.MAX_VALUE))
         );
 
         pack();
@@ -219,7 +236,6 @@ public class DpllGui extends javax.swing.JFrame {
             try{
                 Scanner reader = new Scanner(formulaFile);
                 while(reader.hasNextLine() ){
-                    //System.out.println("citam");
                     String line = reader.nextLine(); 
                     var lineSplit = line.split(" ");
                     if(lineSplit.length == 4 && "p".equals(lineSplit[0])){ //header, num of prop var and num of clauses
@@ -241,6 +257,7 @@ public class DpllGui extends javax.swing.JFrame {
             catch(Exception e){}
             var lit = countLiterals(f,prop);
             formula = new Formula(prop,f,lit);
+            formulaCopy = formula.copy();
             formulaTextArea.setText(formula.toString());
             checkButton.setEnabled(true);
         }
@@ -250,21 +267,13 @@ public class DpllGui extends javax.swing.JFrame {
         if(!"".equals(formulaTextField.getText())){
             //parse formula
         }
-        //Pair check = dpllAlgorithm(formula);
-        /*HashMap<Integer,ArrayList<Integer>> f ;//= test();
-        f = test();
-        ArrayList<Integer> prop = new ArrayList<Integer>(){{add(1);add(2);add(3);add(4);add(5);add(6);}};
-        //prop = Arrays.asList(1,2,3);
-        var lit = countLiterals(f,prop);
-        var keys = lit.keySet().toArray(new Integer[0]);
-        formula = new Formula(prop, f, lit);
-        propLabel.setText(formula.getProp().size() + "");
-        clausesLabel.setText(formula.size() + "");*/
-        
-        Pair rez = dpllAlgorithm(formula);
+        Dpll dpllAlg = new Dpll(formula);
+        Pair rez = dpllAlg.start();
         System.out.println(rez.getDecision());
         if(rez.getDecision()){
             intTextArea.setText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
+            boolean checkResult = checkInterpretation(rez.getInterpretation(), formulaCopy);
+            if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
         }
         else intTextArea.setText("Formula is\nunsatisfiable!");
         
@@ -275,32 +284,54 @@ public class DpllGui extends javax.swing.JFrame {
         else checkButton.setEnabled(false);
     }//GEN-LAST:event_formulaTextFieldKeyReleased
 
-    private Pair dpllAlgorithm(Formula form){
-        System.out.println("pocetak");
-        //formulaTextArea.setEnabled(true);
-        //formulaTextArea.setEnabled(false);
-        satPosibilities r = form.unitPropagate();
-        if( r == satPosibilities.unsat) return new Pair(false, form.getInterpretation());
-        form.pureLiteral();
-        System.out.println("broj disj je " + form.size());
-        if(form.isEmpty()) return new Pair(true, form.getInterpretation());
-        if(form.checkIfSat()) return new Pair(true, form.getInterpretation());
-        if(form.doesEmptyClauseExists()) return new Pair(false, form.getInterpretation());
-        int l = form.chooseLiteral();
-        System.out.println("Odabrani literal je " + l);
-        Formula f1 = form.copy();
-        Formula f2 = form.copy();
+    private void pigeonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pigeonButtonActionPerformed
+        // TODO add your handling code here:
+        PigeonFrame frame = new PigeonFrame();
+        frame.setGUI(this);
+        frame.setVisible(true);
+    }//GEN-LAST:event_pigeonButtonActionPerformed
         
-        f1.assignLiteral(l, false);
-        f2.assignLiteral(l, true);
-        System.out.println("velicina f2 je " + f2.size());
-        Pair p1 = dpllAlgorithm(f1);
-        System.out.println("velicina f2 nakon dpll s f1 je " + f2.size());
-        if(p1.getDecision()) return p1;
-        else {System.out.println("probam s true za " + l); return dpllAlgorithm(f2);}
+    public HashMap<Integer,Set<Integer>> countLiterals(HashMap<Integer,ArrayList<Integer>> f, ArrayList<Integer> propVar){
+        HashMap<Integer,Set<Integer>> ret = new HashMap<>();
+        var keys = f.keySet().toArray(new Integer[0]);
+        for(int p: propVar){
+            Set<Integer> sp = new TreeSet<>();
+            Set<Integer> sm = new TreeSet<>();
+            for(int i = 0; i < keys.length; ++i){
+                ArrayList<Integer> clause = f.get(keys[i]);
+                for( int j = 0; j < clause.size(); ++j){
+                    if(clause.get(j) == p){
+                        sp.add(keys[i]);
+                    }
+                    if(clause.get(j) == -p){
+                        sm.add(keys[i]);
+                    }
+                }
+            }
+            ret.put(p, sp);
+            ret.put(-p,sm);
+        }
+        return ret;
     }
     
-    private HashMap<Integer, ArrayList<Integer>> test(){
+    public boolean checkInterpretation(Interpretation i, Formula f){
+        var clauses = formula.getClauses(); //hashMap
+        for(var c : clauses.entrySet()){ 
+            boolean disj = false;
+            for(var l:c.getValue()){ //list
+                disj = disj || i.getLiteralAssignment(l);
+            }
+            if(!disj){
+                System.out.println("krivo!!");
+                System.out.println(c.getKey());
+                return false;
+            }
+        }
+        return true;
+        
+    }
+    
+        private HashMap<Integer, ArrayList<Integer>> test(){
        HashMap<Integer,ArrayList<Integer>> l = new HashMap<>();
         ArrayList<Integer> d = new ArrayList<Integer>(){{
             add(-1);add(3);add(4);
@@ -347,29 +378,6 @@ public class DpllGui extends javax.swing.JFrame {
         }};
         l.put(10,d);
        return l;
-    }
-    
-    public HashMap<Integer,Set<Integer>> countLiterals(HashMap<Integer,ArrayList<Integer>> f, ArrayList<Integer> propVar){
-        HashMap<Integer,Set<Integer>> ret = new HashMap<>();
-        var keys = f.keySet().toArray(new Integer[0]);
-        for(int p: propVar){
-            Set<Integer> sp = new TreeSet<>();
-            Set<Integer> sm = new TreeSet<>();
-            for(int i = 0; i < keys.length; ++i){
-                ArrayList<Integer> clause = f.get(keys[i]);
-                for( int j = 0; j < clause.size(); ++j){
-                    if(clause.get(j) == p){
-                        sp.add(keys[i]);
-                    }
-                    if(clause.get(j) == -p){
-                        sm.add(keys[i]);
-                    }
-                }
-            }
-            ret.put(p, sp);
-            ret.put(-p,sm);
-        }
-        return ret;
     }
     
     /**
