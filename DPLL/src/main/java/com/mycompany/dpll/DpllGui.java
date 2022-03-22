@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.JFileChooser;
@@ -32,7 +33,10 @@ public class DpllGui extends javax.swing.JFrame {
      */
     public DpllGui() {
         initComponents();
-        jChooser1.setFileFilter(filter);
+        //jChooser1.setFileFilter(filter);
+        clausesLabel.setText("");
+        propLabel.setText("");
+        jChooser1.setCurrentDirectory(new java.io.File("."));
     }
 
     /**
@@ -54,8 +58,17 @@ public class DpllGui extends javax.swing.JFrame {
         pigeonButton = new javax.swing.JButton();
         triangleButton = new javax.swing.JButton();
         queensButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        propLabel = new javax.swing.JLabel();
+        clausesLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        intTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jScrollPane1.setAutoscrolls(true);
+        jScrollPane1.setEnabled(false);
 
         formulaTextArea.setEditable(false);
         formulaTextArea.setColumns(20);
@@ -97,6 +110,21 @@ public class DpllGui extends javax.swing.JFrame {
 
         queensButton.setText("4 queens");
 
+        jLabel3.setText("<html>Number of<br>propositional variables<html>");
+
+        jLabel4.setText("<html>Number of<br>clauses</html>");
+
+        propLabel.setText("jLabel5");
+
+        clausesLabel.setText("jLabel6");
+
+        intTextArea.setEditable(false);
+        intTextArea.setColumns(20);
+        intTextArea.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        intTextArea.setLineWrap(true);
+        intTextArea.setRows(5);
+        jScrollPane2.setViewportView(intTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,24 +133,42 @@ public class DpllGui extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(pigeonButton)
-                        .addGap(62, 62, 62)
-                        .addComponent(triangleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(queensButton))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(propLabel)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(clausesLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(pigeonButton)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addGap(34, 34, 34)
+                                .addComponent(loadButton))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(triangleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(checkButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(queensButton))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(loadButton)))
-                .addGap(18, 18, 18)
-                .addComponent(checkButton)
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,12 +182,20 @@ public class DpllGui extends javax.swing.JFrame {
                     .addComponent(checkButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(pigeonButton)
                         .addComponent(triangleButton)
-                        .addComponent(queensButton)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(queensButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(propLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(clausesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
 
         pack();
@@ -158,29 +212,65 @@ public class DpllGui extends javax.swing.JFrame {
             
             catch(Exception e){}
             File formulaFile = new File(fileName);
+            int id = 0;
+            HashMap<Integer,ArrayList<Integer>> f = new HashMap<>();
+            ArrayList<Integer> prop = new ArrayList<>();
+            
+            try{
+                Scanner reader = new Scanner(formulaFile);
+                while(reader.hasNextLine() ){
+                    //System.out.println("citam");
+                    String line = reader.nextLine(); 
+                    var lineSplit = line.split(" ");
+                    if(lineSplit.length == 4 && "p".equals(lineSplit[0])){ //header, num of prop var and num of clauses
+                        propLabel.setText(lineSplit[2]);
+                        clausesLabel.setText(lineSplit[3]);
+                    }
+                    else if(lineSplit.length > 0 && !"c".equals(lineSplit[0]) && !"p".equals(lineSplit[0])){ //clause
+                        ArrayList<Integer> c = new ArrayList<>();
+                        for(int i = 0; i < lineSplit.length-1; ++i){ //last number is 0, it means end of clause
+                            int l = Integer.parseInt(lineSplit[i]);
+                            if(!prop.contains(abs(l))) prop.add(abs(l));
+                            c.add(l);
+                        }
+                        f.put(id, c);
+                        ++id;
+                    }
+                }
+            }
+            catch(Exception e){}
+            var lit = countLiterals(f,prop);
+            formula = new Formula(prop,f,lit);
+            formulaTextArea.setText(formula.toString());
+            checkButton.setEnabled(true);
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void checkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkButtonActionPerformed
-        if(formulaTextField.getText() != ""){
+        if(!"".equals(formulaTextField.getText())){
             //parse formula
         }
         //Pair check = dpllAlgorithm(formula);
-        HashMap<Integer,ArrayList<Integer>> f ;//= test();
-        //f = test1();
+        /*HashMap<Integer,ArrayList<Integer>> f ;//= test();
         f = test();
         ArrayList<Integer> prop = new ArrayList<Integer>(){{add(1);add(2);add(3);add(4);add(5);add(6);}};
         //prop = Arrays.asList(1,2,3);
         var lit = countLiterals(f,prop);
         var keys = lit.keySet().toArray(new Integer[0]);
-        Formula form = new Formula(prop, f, lit);
-        formulaTextArea.setText(form.toString());
-        Pair rez = dpllAlgorithm(form);
+        formula = new Formula(prop, f, lit);
+        propLabel.setText(formula.getProp().size() + "");
+        clausesLabel.setText(formula.size() + "");*/
+        
+        Pair rez = dpllAlgorithm(formula);
         System.out.println(rez.getDecision());
+        if(rez.getDecision()){
+            intTextArea.setText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
+        }
+        else intTextArea.setText("Formula is\nunsatisfiable!");
+        
     }//GEN-LAST:event_checkButtonActionPerformed
 
     private void formulaTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formulaTextFieldKeyReleased
-        System.out.println(formulaTextField.getText());
         if(!"".equals(formulaTextField.getText())) checkButton.setEnabled(true);
         else checkButton.setEnabled(false);
     }//GEN-LAST:event_formulaTextFieldKeyReleased
@@ -188,7 +278,6 @@ public class DpllGui extends javax.swing.JFrame {
     private Pair dpllAlgorithm(Formula form){
         System.out.println("pocetak");
         //formulaTextArea.setEnabled(true);
-        //formulaTextArea.setText(form.toString());
         //formulaTextArea.setEnabled(false);
         satPosibilities r = form.unitPropagate();
         if( r == satPosibilities.unsat) return new Pair(false, form.getInterpretation());
@@ -320,13 +409,19 @@ public class DpllGui extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton checkButton;
+    private javax.swing.JLabel clausesLabel;
     private javax.swing.JTextArea formulaTextArea;
     private javax.swing.JTextField formulaTextField;
+    private javax.swing.JTextArea intTextArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JButton pigeonButton;
+    private javax.swing.JLabel propLabel;
     private javax.swing.JButton queensButton;
     private javax.swing.JButton triangleButton;
     // End of variables declaration//GEN-END:variables

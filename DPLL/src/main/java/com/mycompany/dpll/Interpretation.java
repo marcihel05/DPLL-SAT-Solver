@@ -38,4 +38,15 @@ public class Interpretation {
         return i;
     }
     
+    @Override
+    public String toString(){
+        StringBuilder ret = new StringBuilder();
+        for(var i: interp.entrySet()){
+            if(i.getValue() == true) ret.append("I(P" + i.getKey() + ") = 1");
+            else ret.append("I(P" + i.getKey() + ") = 0");
+            ret.append("\n");
+        }
+        return ret.toString();
+    }
+    
 }
