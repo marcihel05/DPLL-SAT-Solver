@@ -9,7 +9,10 @@ import java.io.File;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -163,12 +166,14 @@ public class DpllGui extends javax.swing.JFrame {
             //parse formula
         }
         //Pair check = dpllAlgorithm(formula);
-        ArrayList<ArrayList<Integer>> f ;//= test();
+        HashMap<Integer,ArrayList<Integer>> f ;//= test();
         //f = test1();
         f = test();
         ArrayList<Integer> prop = new ArrayList<Integer>(){{add(1);add(2);add(3);add(4);add(5);add(6);}};
         //prop = Arrays.asList(1,2,3);
-        Formula form = new Formula(f, prop);
+        var lit = countLiterals(f,prop);
+        var keys = lit.keySet().toArray(new Integer[0]);
+        Formula form = new Formula(prop, f, lit);
         formulaTextArea.setText(form.toString());
         Pair rez = dpllAlgorithm(form);
         System.out.println(rez.getDecision());
@@ -206,66 +211,77 @@ public class DpllGui extends javax.swing.JFrame {
         else {System.out.println("probam s true za " + l); return dpllAlgorithm(f2);}
     }
     
-    private ArrayList<ArrayList<Integer>> test(){
-       ArrayList<ArrayList<Integer>> l = new ArrayList<ArrayList<Integer>>();
+    private HashMap<Integer, ArrayList<Integer>> test(){
+       HashMap<Integer,ArrayList<Integer>> l = new HashMap<>();
         ArrayList<Integer> d = new ArrayList<Integer>(){{
             add(-1);add(3);add(4);
         }};
-        l.add(d);
+        l.put(0,d);
         d = new ArrayList<Integer>(){{
             add(-2);add(6);add(4);
         }};
-         l.add(d);
+        l.put(1,d);
         d = new ArrayList<Integer>(){{
             add(-2);add(-6);add(-3);
         }};
-        l.add(d);
+        l.put(2,d);
         d = new ArrayList<Integer>(){{
             add(-4);add(-2);
         }};
-        l.add(d);
+        l.put(3,d);
         d = new ArrayList<Integer>(){{
             add(2); add(-3); add(-1);
         }};
-        l.add(d);
+        l.put(4,d);
         d = new ArrayList<Integer>(){{
             add(2);add(6);add(3);
         }};
-        l.add(d);
+        l.put(5,d);
         d = new ArrayList<Integer>(){{
             add(2);add(-6);add(-4);
         }};
-        l.add(d);
+        l.put(6,d);
         d = new ArrayList<Integer>(){{
             add(1);add(5);
         }};
-        l.add(d);
+        l.put(7,d);
         d = new ArrayList<Integer>(){{
             add(1);add(6);
         }};
-        l.add(d);
+        l.put(8,d);
         d = new ArrayList<Integer>(){{
             add(-6);add(3);add(-5);
         }};
-        l.add(d);
+        l.put(9,d);
         d = new ArrayList<Integer>(){{
             add(1);add(-3);add(-5);
         }};
-        l.add(d);
+        l.put(10,d);
        return l;
     }
     
-   /*  private List<List<Integer>> test1(){
-        List<List<Integer>> ret = new ArrayList<>();
-        List<Integer> c = Arrays.asList(1,2,3);
-        ret.add(c);
-        c = Arrays.asList(1,2,-3);
-        ret.add(c);
-        c = Arrays.asList(1,-2,3);
-        ret.add(c);
-        c = Arrays.asList(-1,2,-3);
+    public HashMap<Integer,Set<Integer>> countLiterals(HashMap<Integer,ArrayList<Integer>> f, ArrayList<Integer> propVar){
+        HashMap<Integer,Set<Integer>> ret = new HashMap<>();
+        var keys = f.keySet().toArray(new Integer[0]);
+        for(int p: propVar){
+            Set<Integer> sp = new TreeSet<>();
+            Set<Integer> sm = new TreeSet<>();
+            for(int i = 0; i < keys.length; ++i){
+                ArrayList<Integer> clause = f.get(keys[i]);
+                for( int j = 0; j < clause.size(); ++j){
+                    if(clause.get(j) == p){
+                        sp.add(keys[i]);
+                    }
+                    if(clause.get(j) == -p){
+                        sm.add(keys[i]);
+                    }
+                }
+            }
+            ret.put(p, sp);
+            ret.put(-p,sm);
+        }
         return ret;
-    }*/
+    }
     
     /**
      * @param args the command line arguments
