@@ -77,16 +77,25 @@ public class Formula {
                     if(l > 0) interp.addProp(l, true);
                     else interp.addProp(-l, false);
                     for(int j = 0; j < _clauses.keySet().size(); ++j){
-                        if(_clauses.get(keys[j]).contains(l)){
-                            _clauses.remove(keys[j]);
-                            --j;
-                        }
-                        else if(_clauses.get(keys[j]).contains(-l)){
-                            _clauses.get(keys[j]).remove(_clauses.get(keys[j]).indexOf(-l));
-                            if(_clauses.get(keys[j]).isEmpty()) return satPosibilities.unsat;
-                        }
+                        if(_clauses.containsKey(keys[j])){
+                            if(_clauses.get(keys[j]).contains(l)){
+                                _clauses.remove(keys[j]);
+                                --j;
+                                keys = _clauses.keySet().toArray(new Integer[0]);
+                                if(l == 5) System.out.println(j);
+                                if(l == 5) System.out.println(_clauses.keySet().size());
+                            }
+                            else if(_clauses.get(keys[j]).contains(-l)){
+                                System.out.println("nasao suprotno od " + l);
+                                _clauses.get(keys[j]).remove((Integer)(-l));
+                                if(_clauses.get(keys[j]).isEmpty()) {
+                                    System.out.println("gotovo");
+                                    return satPosibilities.unsat;
+                                }
+                               
+                            }
                             
-                            
+                        }   
                     }
                 }
             }
@@ -141,7 +150,11 @@ public class Formula {
         var c = literals.get(p).toArray(new Integer[0]);
         for(int i = 0; i < literals.get(p).size(); ++i) _clauses.remove(c[i]);
         var negc = literals.get(-p).toArray(new Integer[0]);
-        for(int i = 0; i < literals.get(-p).size(); ++i) _clauses.remove((Integer)(-p));
+        for(int i = 0; i < negc.length; ++i){
+            if(_clauses.containsKey(negc[i]))
+            _clauses.get(negc[i]).remove((Integer)(-p));
+        }
+        //for(int i = 0; i < literals.get(-p).size(); ++i) _clauses.remove((Integer)(-p));
         /*for(int i = 0; i < clauses.size(); ++i){
             boolean remove = false;
             for(int j = 0; j < clauses.get(i).size(); ++j){
