@@ -1,4 +1,4 @@
-package com.mycompany.dpll;
+package dpll;
 
 import static java.lang.Math.abs;
 import java.util.HashMap;

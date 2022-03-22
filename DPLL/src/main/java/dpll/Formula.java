@@ -1,4 +1,4 @@
-package com.mycompany.dpll;
+package dpll;
 
 import java.util.ArrayList;
 

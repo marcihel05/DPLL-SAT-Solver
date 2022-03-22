@@ -1,7 +1,7 @@
-package com.mycompany.dpll;
+package dpll;
 
 
-import com.mycompany.dpll.Formula;
+import dpll.Formula;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;

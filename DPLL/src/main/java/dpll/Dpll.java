@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
 
-package com.mycompany.dpll;
+package dpll;
 
 import static java.lang.Math.abs;
 import java.util.Map;
