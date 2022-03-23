@@ -4,6 +4,7 @@ package dpll;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -94,6 +95,31 @@ public class GraphColoring {
         
         Formula f = new Formula(prop, map);
         return f;
+    }
+    
+    public ArrayList<ArrayList<Integer>> getMatrix(){
+        return graph;
+    }
+    
+    public GraphColoring randomGraphGenerator(int num){
+        Random rnd = new Random();
+        ArrayList<ArrayList<Integer>> mat = new ArrayList<>();
+        for(int i = 0; i < num; ++i){
+            ArrayList<Integer> row = new ArrayList<>();
+            for( int j = 0; j <num; ++j){
+                if(j >= i) {
+                    if(rnd.nextDouble() >= 0.5) row.add(1);
+                    else row.add(0);
+                }
+                else{
+                    row.add(mat.get(j).get(i));
+                }
+            }
+            mat.add(row);
+        }
+        //spremi graf u fajl
+        GraphColoring g = new GraphColoring(mat);
+        return g;
     }
     
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 
@@ -24,6 +25,7 @@ public class GraphFrame extends javax.swing.JFrame {
     private String fileName ="";
     private JFileChooser jChooser1 = new JFileChooser();
     private Formula formula;
+    private DrawGraph drawing;
     
 
     /**
@@ -157,17 +159,14 @@ public class GraphFrame extends javax.swing.JFrame {
                     }
                     System.out.print("\n");
                 }
-                /*checkButton.setEnabled(true);
-                g = new GraphColoring(matrix);
-                System.out.println("stvaram graph");*/
-                
-                //nacrtaj graf
                 
             }
             catch(Exception e){System.out.println(e);}
              checkButton.setEnabled(true);
              g = new GraphColoring(matrix);
              System.out.println("stvaram graph");
+             drawing = new DrawGraph(g);
+             drawing.draw();
             
         }
     }//GEN-LAST:event_loadButtonActionPerformed
@@ -186,6 +185,8 @@ public class GraphFrame extends javax.swing.JFrame {
         if(rez.getDecision()){
             gui.setIntText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
             rezLabel.setText("Coloring successful!");
+            HashMap<Integer,Integer> coloringBook = colorByNumbers(rez.getInterpretation());
+            drawing.color(c, coloringBook);
             //nacrtaj obojeni graf
             //boolean checkResult = checkInterpretation(rez.getInterpretation(), formulaCopy);
            // if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
@@ -196,6 +197,28 @@ public class GraphFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_checkButtonActionPerformed
 
+    private HashMap<Integer,Integer> colorByNumbers(Interpretation i){
+        HashMap<Integer,Integer> coloringBook = new HashMap<>(); //vrh->boja
+        Map<Integer, Boolean> interp = i.getInterp();
+        for(var p : interp.entrySet()){
+            int prop = p.getKey();
+            StringBuilder vertexBuilder = new StringBuilder();
+            String propVar = Integer.toString(prop);
+            for( int j = 0; j < propVar.length()-1; ++j){
+                vertexBuilder.append(propVar.charAt(j));
+            }
+            int vertex = Integer.parseInt(vertexBuilder.toString());
+            int col = Integer.parseInt(propVar.charAt(propVar.length()-1)+"");
+            boolean a = p.getValue();
+            if(a == true){
+                System.out.println("vrh je " + vertex + ", a boja je " + col);
+                coloringBook.put(vertex,col);
+            }
+            
+        }
+        return coloringBook;
+    }
+    
     public void setGUI(DpllGui _gui){
         gui = _gui;
     }

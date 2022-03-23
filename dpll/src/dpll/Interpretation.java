@@ -29,6 +29,10 @@ public class Interpretation {
 
     }
     
+    public Map<Integer, Boolean> getInterp(){
+        return interp;
+    }
+    
     public int size(){
         return interp.size();
     }

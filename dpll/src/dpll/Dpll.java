@@ -25,12 +25,12 @@ public class Dpll {
 
     private Pair dpllAlgorithm(Formula form){
         System.out.println("pocetak");
-        System.out.println("broj disj na pocetku je " + form.size());
+        //System.out.println("broj disj na pocetku je " + form.size());
         satPosibilities r = form.unitPropagate();
-        System.out.println("broj disj nakon unit je " + form.size());
+        //System.out.println("broj disj nakon unit je " + form.size());
         if( r == satPosibilities.unsat) return new Pair(false, form.getInterpretation());
         form.pureLiteral();
-        System.out.println("broj disj nakon pure je " + form.size());
+        //System.out.println("broj disj nakon pure je " + form.size());
         if(form.isEmpty()) return new Pair(true, form.getInterpretation());
         if(form.checkIfSat()) return new Pair(true, form.getInterpretation());
         if(form.doesEmptyClauseExists()) return new Pair(false, form.getInterpretation());

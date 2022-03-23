@@ -62,7 +62,7 @@ public class Formula {
     }
 
     public satPosibilities unitPropagate(){
-        System.out.println("unit");
+        //System.out.println("unit");
         boolean stop = false;
         while(!stop){
             stop = true;
@@ -83,7 +83,7 @@ public class Formula {
                                 keys = clauses.keySet().toArray(new Integer[0]);
                             }
                             else if(clauses.get(keys[j]).contains(-l)){
-                                System.out.println("nasao suprotno od " + l);
+                                //System.out.println("nasao suprotno od " + l);
                                 clauses.get(keys[j]).remove((Integer)(-l));
                                 if(clauses.get(keys[j]).isEmpty()) {
                                     System.out.println("gotovo");
@@ -101,7 +101,7 @@ public class Formula {
     }
 
     public void pureLiteral(){
-        System.out.println("pure literal");
+        //System.out.println("pure literal");
         for(int p: prop){
             boolean positive = false;
             boolean negative = false;
@@ -232,11 +232,6 @@ public class Formula {
         
         
         HashMap<Integer,Set<Integer>> newLit = new HashMap<>();
-        /*for( var l: literals.entrySet()){
-            Set<Integer> newSet = new TreeSet<>();
-            newSet.addAll(l.getValue());
-            newLit.put(l.getKey(), newSet);
-        }*/
         Formula f = new Formula(newProp, new_clauses);
         Interpretation inter = new Interpretation();
         f.setInterpretation(interp.copy());
