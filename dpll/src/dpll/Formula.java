@@ -31,12 +31,12 @@ public class Formula {
         literals = new HashMap<>();
         clauses = new HashMap<>();
     }
-    public Formula(ArrayList<Integer>p, HashMap<Integer,ArrayList<Integer>> _c, HashMap<Integer,Set<Integer>> l){;
+    public Formula(ArrayList<Integer>p, HashMap<Integer,ArrayList<Integer>> _c){;
         prop = p;
         interp = new Interpretation();
         counter = new HashMap<>();
         clauses = _c;
-        literals = l;
+        countLiterals();
         for(int p1 : prop){
             counter.put(p1,0);
         }
@@ -190,6 +190,28 @@ public class Formula {
         return true;
     }
     
+    public void countLiterals(){
+        literals = new HashMap<>();
+        var keys = clauses.keySet().toArray(new Integer[0]);
+        for(int p: prop){
+            Set<Integer> sp = new TreeSet<>();
+            Set<Integer> sm = new TreeSet<>();
+            for(int i = 0; i < keys.length; ++i){
+                ArrayList<Integer> clause = clauses.get(keys[i]);
+                for( int j = 0; j < clause.size(); ++j){
+                    if(clause.get(j) == p){
+                        sp.add(keys[i]);
+                    }
+                    if(clause.get(j) == -p){
+                        sm.add(keys[i]);
+                    }
+                }
+            }
+            literals.put(p, sp);
+            literals.put(-p,sm);
+        }
+    }
+    
     public int size(){
         return clauses.size();
     }
@@ -210,12 +232,12 @@ public class Formula {
         
         
         HashMap<Integer,Set<Integer>> newLit = new HashMap<>();
-        for( var l: literals.entrySet()){
+        /*for( var l: literals.entrySet()){
             Set<Integer> newSet = new TreeSet<>();
             newSet.addAll(l.getValue());
             newLit.put(l.getKey(), newSet);
-        }
-        Formula f = new Formula(newProp, new_clauses, newLit);
+        }*/
+        Formula f = new Formula(newProp, new_clauses);
         Interpretation inter = new Interpretation();
         f.setInterpretation(interp.copy());
         return f;
@@ -241,7 +263,7 @@ public class Formula {
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder();
-        ret.append("F={");
+        ret.append("F = { ");
         var keys = clauses.keySet().toArray(new Integer[0]);
         for(int i = 0; i < clauses.size(); ++i){
             if(i != 0) ret.append("     ");
@@ -252,7 +274,7 @@ public class Formula {
             }
             if(i!=clauses.size()-1) ret.append(",\n");
         }
-        ret.append("}");
+        ret.append(" }");
         return ret.toString();
     }
 

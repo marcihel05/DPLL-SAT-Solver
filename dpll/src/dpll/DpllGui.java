@@ -60,7 +60,7 @@ public class DpllGui extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         pigeonButton = new javax.swing.JButton();
-        triangleButton = new javax.swing.JButton();
+        graphButton = new javax.swing.JButton();
         queensButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -120,8 +120,13 @@ public class DpllGui extends javax.swing.JFrame {
             }
         });
 
-        triangleButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
-        triangleButton.setText("Graph coloring");
+        graphButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        graphButton.setText("Graph coloring");
+        graphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graphButtonActionPerformed(evt);
+            }
+        });
 
         queensButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         queensButton.setText("4 queens");
@@ -181,7 +186,7 @@ public class DpllGui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(queensButton)
                             .addComponent(pigeonButton)
-                            .addComponent(triangleButton))))
+                            .addComponent(graphButton))))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -207,7 +212,7 @@ public class DpllGui extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addComponent(queensButton)
                         .addGap(46, 46, 46)
-                        .addComponent(triangleButton))
+                        .addComponent(graphButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 27, Short.MAX_VALUE))
@@ -253,10 +258,11 @@ public class DpllGui extends javax.swing.JFrame {
                 }
             }
             catch(Exception e){}
-            var lit = countLiterals(f,prop);
-            formula = new Formula(prop,f,lit);
+            //var lit = countLiterals(f,prop);
+            formula = new Formula(prop,f);
             formulaCopy = formula.copy();
             formulaTextArea.setText(formula.toString());
+            intTextArea.setText("");
             checkButton.setEnabled(true);
         }
     }//GEN-LAST:event_loadButtonActionPerformed
@@ -266,7 +272,9 @@ public class DpllGui extends javax.swing.JFrame {
             //parse formula
         }
         Dpll dpllAlg = new Dpll(formula);
+        long startTime = System.nanoTime();
         Pair rez = dpllAlg.start();
+        long endTime = System.nanoTime();
         System.out.println(rez.getDecision());
         if(rez.getDecision()){
             intTextArea.setText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
@@ -274,6 +282,7 @@ public class DpllGui extends javax.swing.JFrame {
             if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
         }
         else intTextArea.setText("Formula is\nunsatisfiable!");
+        System.out.println(endTime-startTime);
         
     }//GEN-LAST:event_checkButtonActionPerformed
 
@@ -288,6 +297,13 @@ public class DpllGui extends javax.swing.JFrame {
         frame.setGUI(this);
         frame.setVisible(true);
     }//GEN-LAST:event_pigeonButtonActionPerformed
+
+    private void graphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphButtonActionPerformed
+        // TODO add your handling code here:
+        GraphFrame frame = new GraphFrame();
+        frame.setGUI(this);
+        frame.setVisible(true);
+    }//GEN-LAST:event_graphButtonActionPerformed
         
     public HashMap<Integer,Set<Integer>> countLiterals(HashMap<Integer,ArrayList<Integer>> f, ArrayList<Integer> propVar){
         HashMap<Integer,Set<Integer>> ret = new HashMap<>();
@@ -436,6 +452,7 @@ public class DpllGui extends javax.swing.JFrame {
     private javax.swing.JLabel clausesLabel;
     private javax.swing.JTextArea formulaTextArea;
     private javax.swing.JTextField formulaTextField;
+    private javax.swing.JButton graphButton;
     private javax.swing.JTextArea intTextArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -447,6 +464,5 @@ public class DpllGui extends javax.swing.JFrame {
     private javax.swing.JButton pigeonButton;
     private javax.swing.JLabel propLabel;
     private javax.swing.JButton queensButton;
-    private javax.swing.JButton triangleButton;
     // End of variables declaration//GEN-END:variables
 }

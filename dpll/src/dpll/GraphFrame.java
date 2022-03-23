@@ -32,6 +32,7 @@ public class GraphFrame extends javax.swing.JFrame {
     public GraphFrame() {
         initComponents();
         jChooser1.setCurrentDirectory(new java.io.File("."));
+        rezLabel.setText("");
     }
 
     /**
@@ -45,12 +46,12 @@ public class GraphFrame extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        colorSpinner = new javax.swing.JSpinner();
         loadButton = new javax.swing.JButton();
         checkButton = new javax.swing.JButton();
         rezLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
         jLabel1.setText("Graph Coloring");
@@ -58,7 +59,7 @@ public class GraphFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel2.setText("Number of colors");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        colorSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         loadButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         loadButton.setText("<html>Load graph<br>     from file</html>");
@@ -95,7 +96,7 @@ public class GraphFrame extends javax.swing.JFrame {
                             .addGap(29, 29, 29)
                             .addComponent(jLabel2)
                             .addGap(18, 18, 18)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(rezLabel)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
@@ -111,7 +112,7 @@ public class GraphFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))))
                 .addGap(18, 18, 18)
                 .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,21 +126,22 @@ public class GraphFrame extends javax.swing.JFrame {
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         // TODO add your handling code here:
-          int retVal = jChooser1.showOpenDialog((Component)evt.getSource());
+        System.out.println("Stisnuti gumb");
+        ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+        int retVal = jChooser1.showOpenDialog((Component)evt.getSource());
         if( retVal == JFileChooser.APPROVE_OPTION){
             File file = jChooser1.getSelectedFile();
+            System.out.println("otvaram file");
             try{
                 fileName = file.toString();
             }
             
             catch(Exception e){}
             File formulaFile = new File(fileName);
-            ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
-            
-            
             try{
                 Scanner reader = new Scanner(formulaFile);
                 while(reader.hasNextLine() ){
+                    System.out.println("citam file");
                     String line = reader.nextLine(); 
                     ArrayList<Integer> red = new ArrayList<>();
                     var lineSplit = line.split(" ");
@@ -148,23 +150,43 @@ public class GraphFrame extends javax.swing.JFrame {
                     }
                     matrix.add(red);
                 }
+                System.out.println("ucitani graf");
+                for(var red:matrix){
+                    for(var e : red){
+                        System.out.print(e+" ");
+                    }
+                    System.out.print("\n");
+                }
+                /*checkButton.setEnabled(true);
                 g = new GraphColoring(matrix);
-                formula = g.generateFormula();
-                gui.setFormulaText(formula.toString());
+                System.out.println("stvaram graph");*/
+                
                 //nacrtaj graf
-                checkButton.setEnabled(true);
+                
             }
-            catch(Exception e){}
+            catch(Exception e){System.out.println(e);}
+             checkButton.setEnabled(true);
+             g = new GraphColoring(matrix);
+             System.out.println("stvaram graph");
             
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void checkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkButtonActionPerformed
         // TODO add your handling code here:
+        int c = (int)colorSpinner.getValue();
+        g.setNumOfColors(c);
+        formula = g.generateFormula();
+        System.out.println("stvaram formulu");
+        gui.setFormulaText(formula.toString());
+        gui.setPropLabel(formula.numOfProp()+"");
+        gui.setClausesLabel(formula.size() + "");
         dpllAlg = new Dpll(formula);
         Pair rez = dpllAlg.start();
         if(rez.getDecision()){
             gui.setIntText("Formula is\nsatisfiable!\n" + rez.getInterpretation().toString());
+            rezLabel.setText("Coloring successful!");
+            //nacrtaj obojeni graf
             //boolean checkResult = checkInterpretation(rez.getInterpretation(), formulaCopy);
            // if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
         }
@@ -180,44 +202,13 @@ public class GraphFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GraphFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GraphFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GraphFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GraphFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GraphFrame().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton checkButton;
+    private javax.swing.JSpinner colorSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JButton loadButton;
     private javax.swing.JLabel rezLabel;
     // End of variables declaration//GEN-END:variables

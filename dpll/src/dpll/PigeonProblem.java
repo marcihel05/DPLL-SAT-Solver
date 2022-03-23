@@ -53,8 +53,8 @@ public class PigeonProblem {
                 
             }
         }
-        var lit = countLiterals(f,prop);
-        Formula formula = new Formula(prop,f,lit);
+        //var lit = countLiterals(f,prop);
+        Formula formula = new Formula(prop,f);
         return formula;
     }
     

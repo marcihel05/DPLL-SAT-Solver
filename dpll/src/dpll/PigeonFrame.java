@@ -109,6 +109,7 @@ public class PigeonFrame extends javax.swing.JFrame {
         gui.setFormulaText(f.toString());
         gui.setPropLabel(f.numOfProp()+"");
         gui.setClausesLabel(f.size()+"");
+        gui.setIntText("");
         dpllAlg = new Dpll(f);
         Pair rez = dpllAlg.start();
         if(rez.getDecision()){
