@@ -107,7 +107,8 @@ public class GraphColoring {
         for(int i = 0; i < num; ++i){
             ArrayList<Integer> row = new ArrayList<>();
             for( int j = 0; j <num; ++j){
-                if(j >= i) {
+                if(j == i) row.add(0);
+                else if(j > i) {
                     if(rnd.nextDouble() >= 0.5) row.add(1);
                     else row.add(0);
                 }

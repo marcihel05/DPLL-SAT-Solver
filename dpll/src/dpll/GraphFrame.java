@@ -52,6 +52,11 @@ public class GraphFrame extends javax.swing.JFrame {
         loadButton = new javax.swing.JButton();
         checkButton = new javax.swing.JButton();
         rezLabel = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        randButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        nodesSpinner = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -83,24 +88,56 @@ public class GraphFrame extends javax.swing.JFrame {
         rezLabel.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         rezLabel.setText("jLabel3");
 
+        jLabel3.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        jLabel3.setText("or");
+
+        randButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        randButton.setText("<html>     Generate<br>random graph</html>");
+        randButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                randButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        jLabel4.setText("with");
+
+        nodesSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+
+        jLabel5.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        jLabel5.setText("vertices");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(29, 29, 29)
-                            .addComponent(jLabel2)
-                            .addGap(18, 18, 18)
-                            .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(rezLabel)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(101, 101, 101)
+                                .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(rezLabel))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(randButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addGap(13, 13, 13)
+                        .addComponent(nodesSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,17 +147,27 @@ public class GraphFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(randButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(nodesSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addGap(15, 15, 15)))
+                        .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))))
-                .addGap(18, 18, 18)
-                .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                            .addComponent(jLabel2)
+                            .addComponent(colorSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)))
                 .addComponent(rezLabel)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -197,6 +244,16 @@ public class GraphFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_checkButtonActionPerformed
 
+    private void randButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randButtonActionPerformed
+        // TODO add your handling code here:
+        GraphColoring randomizer = new GraphColoring();
+        g = randomizer.randomGraphGenerator((int)nodesSpinner.getValue());
+        checkButton.setEnabled(true);
+        System.out.println("stvaram graph");
+        drawing = new DrawGraph(g);
+        drawing.draw();
+    }//GEN-LAST:event_randButtonActionPerformed
+
     private HashMap<Integer,Integer> colorByNumbers(Interpretation i){
         HashMap<Integer,Integer> coloringBook = new HashMap<>(); //vrh->boja
         Map<Integer, Boolean> interp = i.getInterp();
@@ -232,7 +289,12 @@ public class GraphFrame extends javax.swing.JFrame {
     private javax.swing.JSpinner colorSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JButton loadButton;
+    private javax.swing.JSpinner nodesSpinner;
+    private javax.swing.JButton randButton;
     private javax.swing.JLabel rezLabel;
     // End of variables declaration//GEN-END:variables
 }

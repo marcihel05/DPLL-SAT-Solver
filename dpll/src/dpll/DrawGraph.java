@@ -68,7 +68,7 @@ public class DrawGraph {
                 
             }
         }
-        graph.edges().forEach(e -> e.setAttribute("ui.style", "fill-color: darkgrey; size:1.5;"));
+        graph.edges().forEach(e -> e.setAttribute("ui.style", "fill-color: darkgrey; size:2;"));
         Viewer viewer = graph.display();
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     }

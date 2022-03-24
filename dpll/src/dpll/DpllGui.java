@@ -4,6 +4,7 @@
  */
 package dpll;
 
+import java.awt.CheckboxGroup;
 import java.awt.Component;
 import java.io.File;
 import static java.lang.Math.abs;
@@ -28,10 +29,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DpllGui extends javax.swing.JFrame {
     
-    private Formula formula;
+    private Formula formula = new Formula();
     private Formula formulaCopy;
     private String fileName ="";
     private JFileChooser jChooser1 = new JFileChooser();
+    private CheckboxGroup checkGroup = new CheckboxGroup();
+    private boolean start = true;
 
     /**
      * Creates new form DpllGui
@@ -41,6 +44,7 @@ public class DpllGui extends javax.swing.JFrame {
         clausesLabel.setText("");
         propLabel.setText("");
         jChooser1.setCurrentDirectory(new java.io.File("."));
+        prettyCheckBox.setSelected(true);
     }
 
     /**
@@ -61,13 +65,15 @@ public class DpllGui extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         pigeonButton = new javax.swing.JButton();
         graphButton = new javax.swing.JButton();
-        queensButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         propLabel = new javax.swing.JLabel();
         clausesLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         intTextArea = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
+        prettyCheckBox = new javax.swing.JCheckBox();
+        uglyCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +106,8 @@ public class DpllGui extends javax.swing.JFrame {
             }
         });
 
+        formulaTextField.setEditable(false);
+        formulaTextField.setEnabled(false);
         formulaTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 formulaTextFieldKeyReleased(evt);
@@ -128,9 +136,6 @@ public class DpllGui extends javax.swing.JFrame {
             }
         });
 
-        queensButton.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
-        queensButton.setText("4 queens");
-
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel3.setText("<html>Number of<br>propositional variables<html>");
 
@@ -149,6 +154,25 @@ public class DpllGui extends javax.swing.JFrame {
         intTextArea.setLineWrap(true);
         intTextArea.setRows(5);
         jScrollPane2.setViewportView(intTextArea);
+
+        jLabel5.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        jLabel5.setText("Formula notation");
+
+        prettyCheckBox.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        prettyCheckBox.setText("\\/");
+        prettyCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prettyCheckBoxActionPerformed(evt);
+            }
+        });
+
+        uglyCheckBox.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        uglyCheckBox.setText("<-");
+        uglyCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uglyCheckBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,11 +206,13 @@ public class DpllGui extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(queensButton)
-                            .addComponent(pigeonButton)
-                            .addComponent(graphButton))))
+                            .addComponent(prettyCheckBox)
+                            .addComponent(jLabel5)
+                            .addComponent(uglyCheckBox)
+                            .addComponent(graphButton)
+                            .addComponent(pigeonButton))))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -209,12 +235,16 @@ public class DpllGui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pigeonButton)
-                        .addGap(38, 38, 38)
-                        .addComponent(queensButton)
-                        .addGap(46, 46, 46)
-                        .addComponent(graphButton))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(graphButton)
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(prettyCheckBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(uglyCheckBox))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 27, Short.MAX_VALUE))
         );
 
@@ -241,6 +271,8 @@ public class DpllGui extends javax.swing.JFrame {
                 while(reader.hasNextLine() ){
                     String line = reader.nextLine(); 
                     var lineSplit = line.split(" ");
+                    System.out.println(lineSplit.length);
+                    if(lineSplit.length == 1) lineSplit = line.split("  ");
                     if(lineSplit.length == 4 && "p".equals(lineSplit[0])){ //header, num of prop var and num of clauses
                         propLabel.setText(lineSplit[2]);
                         clausesLabel.setText(lineSplit[3]);
@@ -259,9 +291,11 @@ public class DpllGui extends javax.swing.JFrame {
             }
             catch(Exception e){}
             //var lit = countLiterals(f,prop);
+            start = false;
             formula = new Formula(prop,f);
             formulaCopy = formula.copy();
-            formulaTextArea.setText(formula.toString());
+            if(prettyCheckBox.isSelected()) formulaTextArea.setText(formula.toString());
+            else formulaTextArea.setText(formula.toStringUgly());
             intTextArea.setText("");
             checkButton.setEnabled(true);
         }
@@ -304,6 +338,26 @@ public class DpllGui extends javax.swing.JFrame {
         frame.setGUI(this);
         frame.setVisible(true);
     }//GEN-LAST:event_graphButtonActionPerformed
+
+    private void prettyCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prettyCheckBoxActionPerformed
+        // TODO add your handling code here:
+        if(start) {
+            uglyCheckBox.setSelected(false);
+            return;
+        }
+        uglyCheckBox.setSelected(false);
+        formulaTextArea.setText(formula.toString());
+    }//GEN-LAST:event_prettyCheckBoxActionPerformed
+
+    private void uglyCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uglyCheckBoxActionPerformed
+        // TODO add your handling code here:
+        if(start) {
+            prettyCheckBox.setSelected(false);
+            return;
+        }
+        prettyCheckBox.setSelected(false);
+        formulaTextArea.setText(formula.toStringUgly());
+    }//GEN-LAST:event_uglyCheckBoxActionPerformed
         
     public HashMap<Integer,Set<Integer>> countLiterals(HashMap<Integer,ArrayList<Integer>> f, ArrayList<Integer> propVar){
         HashMap<Integer,Set<Integer>> ret = new HashMap<>();
@@ -458,11 +512,13 @@ public class DpllGui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JButton pigeonButton;
+    private javax.swing.JCheckBox prettyCheckBox;
     private javax.swing.JLabel propLabel;
-    private javax.swing.JButton queensButton;
+    private javax.swing.JCheckBox uglyCheckBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -255,6 +255,30 @@ public class Formula {
         return prop;
     }
     
+    public String toStringUgly(){
+        StringBuilder ret = new StringBuilder();
+        ret.append("F = { ");
+         var keys = clauses.keySet().toArray(new Integer[0]);
+        for(int i = 0; i < clauses.size(); ++i){
+            if(i != 0) ret.append("     ");
+            StringBuilder left = new StringBuilder();
+            StringBuilder right = new StringBuilder();
+            for(int j = 0; j < clauses.get(keys[i]).size(); ++j){
+                if(clauses.get(keys[i]).get(j) < 0) {
+                    right.append("P").append(abs(clauses.get(keys[i]).get(j))).append(",");
+                }
+                else{
+                    left.append("P").append(abs(clauses.get(keys[i]).get(j))).append(",");
+                }
+
+            }
+            ret.append(left.toString()).append(" <- ").append(right.toString());
+            if(i!=clauses.size()-1) ret.append(",\n");
+        }
+        ret.append(" }");
+        return ret.toString();
+    }
+    
     @Override
     public String toString(){
         StringBuilder ret = new StringBuilder();
