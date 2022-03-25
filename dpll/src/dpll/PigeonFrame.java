@@ -106,7 +106,8 @@ public class PigeonFrame extends javax.swing.JFrame {
         noLabel.setText("");
         pp = new PigeonProblem((int)nSpinner.getValue());
         Formula f = pp.generateFormula();
-        gui.setFormulaText(f.toString());
+        gui.setFormula(f);
+        //gui.setFormulaText(f.toString());
         gui.setPropLabel(f.numOfProp()+"");
         gui.setClausesLabel(f.size()+"");
         gui.setIntText("");

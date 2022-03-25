@@ -224,7 +224,8 @@ public class GraphFrame extends javax.swing.JFrame {
         g.setNumOfColors(c);
         formula = g.generateFormula();
         System.out.println("stvaram formulu");
-        gui.setFormulaText(formula.toString());
+        gui.setFormula(formula);
+        //gui.setFormulaText(formula.toString());
         gui.setPropLabel(formula.numOfProp()+"");
         gui.setClausesLabel(formula.size() + "");
         dpllAlg = new Dpll(formula);
@@ -234,9 +235,6 @@ public class GraphFrame extends javax.swing.JFrame {
             rezLabel.setText("Coloring successful!");
             HashMap<Integer,Integer> coloringBook = colorByNumbers(rez.getInterpretation());
             drawing.color(c, coloringBook);
-            //nacrtaj obojeni graf
-            //boolean checkResult = checkInterpretation(rez.getInterpretation(), formulaCopy);
-           // if(!checkResult) intTextArea.append("\nSomething went wrong!!!");
         }
         else {
             gui.setIntText("Formula is\nunsatisfiable!");

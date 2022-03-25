@@ -399,6 +399,12 @@ public class DpllGui extends javax.swing.JFrame {
         
     }
     
+    public void setFormula(Formula f){
+        formula = f;
+        if(prettyCheckBox.isSelected()) formulaTextArea.setText(formula.toString());
+        else formulaTextArea.setText(formula.toStringUgly());
+    }
+    
     public void setFormulaText(String text){
         formulaTextArea.setText(text);
     }

@@ -45,12 +45,16 @@ public class Formula {
     
     private void count(){
         for(int p: prop){
-            for(ArrayList<Integer> c: clauses.values()){
+            if(interp.doesPropExist(p)) counter.replace(p,-1);
+            else{
+                counter.replace(p, (literals.get(p).size() + literals.get(-p).size()));
+            }
+            /*for(ArrayList<Integer> c: clauses.values()){
                 for(int l: c){
                     if(p == l || p == -l) counter.replace(p, counter.get(p) + 1);
                     if(interp.doesPropExist(p)) counter.replace(p,-1);
                 }
-            }
+            }*/
         }
     }
 
@@ -128,11 +132,20 @@ public class Formula {
     
     private void removeClauses(int p){
         var c = literals.get(p).toArray(new Integer[0]);
-        for(int i = 0; i < literals.get(p).size(); ++i) clauses.remove(c[i]);
+        for(int i = 0; i < literals.get(p).size(); ++i) {
+            removeFromLiterals(c[i]);
+            clauses.remove(c[i]);
+        }
         var negc = literals.get(-p).toArray(new Integer[0]);
         for(int i = 0; i < negc.length; ++i){
             if(clauses.containsKey(negc[i]))
             clauses.get(negc[i]).remove((Integer)(-p));
+        }
+    }
+    
+    private void removeFromLiterals(int ind){
+        for(var c: literals.entrySet()){
+            c.getValue().remove((Integer)ind);
         }
     }
 
